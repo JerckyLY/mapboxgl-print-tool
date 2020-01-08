@@ -54,8 +54,8 @@
   - 界面   
   ![](fullmap.png)
   
-  - 全图打印
+  - 全图打印   
   ![](fullprint.jpg)
   
-  - 框选打印
+  - 框选打印   
   ![](partprint.jpg)
