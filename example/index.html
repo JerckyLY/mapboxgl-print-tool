@@ -7,28 +7,27 @@
     <title>Document</title>
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css" rel="stylesheet" />
-    <script src="../dist/index.js"></script>
+    <!---->
+    <script src="https://cdn.jsdelivr.net/npm/mapboxgl-print-tool@1.0.2/dist/index.js"></script>
+    <!--<script src="../dist/index.js"></script>-->
     <style>
-        body,html{
-            width: 100%; height:100%;
-            margin: 0 auto;
-            text-align: center;
-        }
+        body,html {height: 100%;width: 100%; margin: 0; padding: 0; }
     </style>
 </head>
 <body >
-<div id='map' style='width: 90%; height:100%'></div>
+<div id='map' style="height: 100%;width: 100%"></div>
+
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoiamVyY2t5IiwiYSI6ImNqYjI5dWp3dzI1Y2YzMnM3eG0xNnV3bWsifQ.eQp4goc9Ng8SuEZcdgNJ_g';
     var map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v9'
+        style: 'mapbox://styles/mapbox/streets-v9',
+        preserveDrawingBuffer:true //canvas toDataURL
     });
-    const mapPrint  = new mapPrintTool({
-        enableImg:true,
-        fileName:'test.jpg'
+    const mapPrint  = new MapPrintTool({
+        enableImg:true, //是否出图
+        fileName:'mapDemo.png' // 文件名
     })
-
     map.addControl(mapPrint, 'top-right')
     mapPrint.on('success',function (res) {
         console.log(res)

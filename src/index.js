@@ -14,6 +14,7 @@ class mapPrintTool extends BaseEvents {
             enableImg:true,
             fileName:'map.jpg'
         },options)
+        console.log(this.options)
         this.printType = -1 // 0 是全局 1是部分 默认是-1
         this.printBox = null
         this.printStart = null
@@ -22,15 +23,19 @@ class mapPrintTool extends BaseEvents {
         this._onMouseDown = this._onMouseDown.bind(this)
         this._onMouseMove = this._onMouseMove.bind(this)
         this._onMouseUp = this._onMouseUp.bind(this)
+        this.saveAsIMG = this.saveAsIMG.bind(this)
     }
 
     onAdd (map) {
         this.map = map
-        //初始化按钮
+        this.printContrainer = map.getContainer()
+
+            //初始化按钮
         this.initPrintToolControl()
 
         // 全图打印按钮点击事件
         this.fullPrintButton.addEventListener('click', ()=> {
+            this.printType = 0
             const canvas = this.map.getCanvas()
             if(this.options.enableImg) {
                 this.saveAsIMG(canvas)
@@ -43,15 +48,11 @@ class mapPrintTool extends BaseEvents {
 
         // 框选打印按钮点击事件
         this.partPrintButton.addEventListener('click', () => {
+            this.printType = 1
             this.printCanvas = this.map.getCanvas()
+            this.map.boxZoom.disable()
             this.printCanvas.addEventListener('mousedown', this._onMouseDown);
-            if(this.options.enableImg) {
-                this.saveAsIMG(this.bboxCanvas)
-            }
-            let data = {
-                data:this.bboxCanvas.toDataURL()
-            }
-            this.emit('success',data)
+
         })
 
 
@@ -74,10 +75,7 @@ class mapPrintTool extends BaseEvents {
 
         // Disable default drag zooming when the shift key is held down.
         this.map.dragPan.disable();
-        if (this.printBox) {
-            this.printBox.parentNode.removeChild(this.printBox);
-            this.printBox = null;
-        }
+
         // Call functions for the following events
         document.addEventListener('mousemove', this._onMouseMove);
         document.addEventListener('mouseup', this._onMouseUp);
@@ -97,8 +95,9 @@ class mapPrintTool extends BaseEvents {
         // Append the box element if it doesnt exist
         if (!this.printBox) {
             this.printBox = document.createElement('div');
-            this.printBox.classList.add('map-print-box-draw');
-            this.printCanvas.appendChild(this.printBox);
+            this.printBox.classList.add('mapboxgl-boxzoom');
+            this.printContrainer.classList.add('mapboxgl-crosshair')
+            this.printContrainer.appendChild(this.printBox);
         }
 
         let minX = Math.min(this.printStart.x, this.printCurrent.x),
@@ -131,10 +130,10 @@ class mapPrintTool extends BaseEvents {
      * @returns {mapboxgl.Point}
      */
     mousePos(e) {
-        let rect = this.printCanvas.getBoundingClientRect();
+        let rect = this.map.getCanvasContainer().getBoundingClientRect();
         return new mapboxgl.Point(
-            e.clientX - rect.left - this.printCanvas.clientLeft,
-            e.clientY - rect.top - this.printCanvas.clientTop
+            e.clientX - rect.left - this.map.getCanvasContainer().clientLeft,
+            e.clientY - rect.top - this.map.getCanvasContainer().clientTop
         );
     }
 
@@ -146,10 +145,19 @@ class mapPrintTool extends BaseEvents {
         // Remove these events now that finish has been called.
         document.removeEventListener('mousemove', this._onMouseMove);
         document.removeEventListener('mouseup', this._onMouseUp);
+
+
+        if (this.printBox) {
+            this.printContrainer.classList.remove('mapboxgl-crosshair')
+            this.printBox.parentNode.removeChild(this.printBox);
+            this.printBox = null;
+        }
+
         if (bbox) {
             this.bboxPrint(bbox)
         }
-        this.map.dragPan.enable();
+        this.map.dragPan.enable()
+        this.map.boxZoom.enable()
         this.printCanvas.removeEventListener('mousedown', this._onMouseDown);
     }
 
@@ -164,7 +172,7 @@ class mapPrintTool extends BaseEvents {
         oCanvas.width= width;
         oCanvas.height= height;
         // 获取webgl
-        const gl =  map.getCanvas().getContext('webgl',{preserveDrawingBuffer:true})
+        const gl =  this.map.getCanvas().getContext('webgl',{preserveDrawingBuffer:true})
         const pixels  = new Uint8Array( width*height*4);
         // 从缓冲区读取像素数据，然后将其装到事先建立好的像素集合里
         gl.readPixels(bbox[0].x, bbox[0].y, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
@@ -180,7 +188,13 @@ class mapPrintTool extends BaseEvents {
         // 翻转之后放入canvas中
         oCtx.putImageData( turnNewData, 0, 0);
         this.bboxCanvas = oCanvas
-
+        if(this.options.enableImg) {
+            this.saveAsIMG(this.bboxCanvas)
+        }
+        let data = {
+            data:this.bboxCanvas.toDataURL()
+        }
+        this.emit('success',data)
     }
 
     /**
@@ -191,7 +205,7 @@ class mapPrintTool extends BaseEvents {
         if (navigator.msSaveBlob) {
             navigator.msSaveBlob(canvas.msToBlob(),  this.options.fileName);
         } else {
-            canvas.toBlob(function(blob) {
+            canvas.toBlob((blob) => {
                 FileSave.saveAs(blob, this.options.fileName);
             });
         }
@@ -245,3 +259,5 @@ class mapPrintTool extends BaseEvents {
 
 
 }
+
+export default mapPrintTool

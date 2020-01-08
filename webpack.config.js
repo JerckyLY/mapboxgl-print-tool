@@ -19,7 +19,7 @@ module.exports = {
         path: resolve('dist'), // 输出目录
         filename: 'index.js', // 输出文件
         libraryTarget: 'umd', // 采用通用模块定义
-        library: 'mapPrintTool', // 库名称
+        library: 'MapPrintTool', // 库名称
         libraryExport: 'default', // 兼容 ES6(ES2015) 的模块系统、CommonJS 和 AMD 模块规范
         globalObject: 'this' // 兼容node和浏览器运行，避免window is not undefined情况
     },
