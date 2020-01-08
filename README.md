@@ -1,6 +1,6 @@
-# mapboxgl-print-tool
+## mapboxgl-print-tool
 地图全图打印，框选打印导出图片
-# 使用
+## 使用
  -  CDN
      ```js
        <script src="https://cdn.jsdelivr.net/npm/mapboxgl-print-tool@1.0.2/dist/index.js"></script>
@@ -43,19 +43,19 @@
     
     ```  
     
-# 配置项 -- 两个绑定出现
+## 配置项 -- 两个绑定出现
 
   ` | 名称 | 类型 | 描述 | 默认值
   :---: |:---: | :---: | :---: | :---:
   1 | enableImg | Boolean | 是否导出图片 | true| 
   2 | fileName| String | 导出的图片文件名 | 'map.jpg'|
  
-# 效果
+## 效果
   - 界面   
-  ![](fullmap.png)
+  ![](assets/fullmap.png)
   
   - 全图打印   
-  ![](fullprint.jpg)
+  ![](assets/fullprint.jpg)
   
   - 框选打印   
-  ![](partprint.jpg)
+  ![](assets/pariprint.jpg)
