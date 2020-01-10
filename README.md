@@ -53,7 +53,7 @@
   2 | fileName| String | 导出的图片文件名 | 'map.jpg'|
  
 ## 事件 
-  - 监听 **`success`**，获取 **`canvas`**转成的图片数据 **`base64`**
+  - 监听 **`success`**，获取 **`canvas`** 转成的图片数据 **`base64`**
     ```js
       const mapPrint = new MapPrintTool()
       mapPrint.on('success',(res) => {
