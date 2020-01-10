@@ -5,8 +5,8 @@
 */
 
 import BaseEvents from './Event'
-import FileSave from 'file-saver'
-import mapboxgl from 'mapbox-gl'
+const FileSaver = require('file-saver');
+const mapboxgl =  require('mapbox-gl')
 class mapPrintTool extends BaseEvents {
     constructor (options) {
         super()
@@ -14,7 +14,6 @@ class mapPrintTool extends BaseEvents {
             enableImg:true,
             fileName:'map.jpg'
         },options)
-        console.log(this.options)
         this.printType = -1 // 0 是全局 1是部分 默认是-1
         this.printBox = null
         this.printStart = null
@@ -206,7 +205,7 @@ class mapPrintTool extends BaseEvents {
             navigator.msSaveBlob(canvas.msToBlob(),  this.options.fileName);
         } else {
             canvas.toBlob((blob) => {
-                FileSave.saveAs(blob, this.options.fileName);
+                saveAs(blob, this.options.fileName);
             });
         }
     }

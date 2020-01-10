@@ -9,11 +9,22 @@ const resolve = dir => path.join(__dirname, '.', dir)
 const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
-    node: {
-        fs: 'empty' // 解决无法识别fs
-    },
     entry: {
         index: './src/index.js'
+    },
+    externals: { // npm原则，const FileSaver = require('file-saver'); 不同模块 使用不同依赖，root为浏览器环境下
+        "file-saver":{
+            commonjs:"file-saver",
+            commonjs2:'file-saver',
+            amd:"file-saver",
+            root:'FileSaver'
+        },
+        "mapbox-gl":{
+            commonjs:"mapbox-gl",
+            commonjs2:'mapbox-gl',
+            amd:"mapbox-gl",
+            root:"mapboxgl"
+        }
     },
     output: {
         path: resolve('dist'), // 输出目录

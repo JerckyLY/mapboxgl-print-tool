@@ -1,6 +1,6 @@
 {
   "name": "mapboxgl-print-tool",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "description": "mapboxgl地图打印",
   "main": "dist/index.js",
   "scripts": {

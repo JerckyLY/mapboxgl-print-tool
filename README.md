@@ -3,7 +3,9 @@
 ## 使用
  -  CDN
      ```js
-       <script src="https://cdn.jsdelivr.net/npm/mapboxgl-print-tool@1.0.2/dist/index.js"></script>
+     // 依赖file-save下载图片
+       <script src="https://cdn.bootcss.com/FileSaver.js/2014-11-29/FileSaver.min.js"></script>
+       <script src="https://cdn.jsdelivr.net/npm/mapboxgl-print-tool@1.0.5/dist/index.js"></script>
      ```
      ```js
         <script>
